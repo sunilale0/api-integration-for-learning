@@ -32,36 +32,38 @@ class App extends Component {
     }
   }
 
-  loadPokeCards = el => {
-    return (
-      <li>
-        {console.log(el.name)}
-        {el.name}
-      </li>
-    );
+  fetchImage = async url => {
+    const pokeData = await fetch(url);
+    const pokeJson = await pokeData.json();
+    console.log(pokeJson);
+    console.log('image of pokemon url', pokeJson.sprite.front_default);
+    return pokeJson.sprite.front_default;
   };
 
   render() {
     // return <WorkingApi />;
     return this.state.pokemons.length ? (
-      <div>
-        <ul>
-          {this.state.pokemons.forEach(el => (
-            <div className='card' style={{ width: '18rem' }}>
-              <div className='card-body'>
-                {console.log(el)}
-                something else
-                <h5 className='card-title'>{el.name}</h5>
-                <p className='card-text'>
-                  The url of {el.name} is{el.url}
-                </p>
-                <a href={el.url} className='btn btn-primary'>
-                  URL
-                </a>
-              </div>
+      <div style={{ display: 'block' }}>
+        {this.state.pokemons.map(el => (
+          <div className='card' style={{ width: '18rem' }} key={el.name + 1}>
+            <img
+              src={() => this.fetchImage(el.url)}
+              className='card-img-top'
+              alt='...'
+            />
+            <div className='card-body'>
+              {console.log(el)}
+              something else
+              <h5 className='card-title'>{el.name}</h5>
+              <p className='card-text'>
+                The url of {el.name} is {el.url}
+              </p>
+              <a href={el.url} className='btn btn-primary'>
+                URL
+              </a>
             </div>
-          ))}
-        </ul>
+          </div>
+        ))}
         <p>
           something: {this.state.pokemons.forEach(el => console.log(el.name))}
         </p>
